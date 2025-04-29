@@ -174,7 +174,7 @@ const AuthForm = ({ type, onSubmit, error, onNavigate, navigateText }) => {
             <button
               type="button"
               onClick={onNavigate}
-              className="text-blue-600 hover:text-blue-700 font-medium"
+              className="text-white-600 hover:text-white-700 font-medium"
             >
               {navigateText}
             </button>

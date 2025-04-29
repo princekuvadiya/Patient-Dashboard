@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import patientService from '../services/patientService';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { mockWeightData, mockShipments } from '../data/mockData';
 
 const DashboardPage = () => {
   const { currentUser } = useAuth();
   const [weightHistory, setWeightHistory] = useState([]);
   const [shipments, setShipments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isSeeded, setIsSeeded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,10 +19,13 @@ const DashboardPage = () => {
           patientService.getWeightHistory(),
           patientService.getShipments()
         ]);
-        if (weightResult.success) setWeightHistory(weightResult.data);
-        if (shipmentResult.success) setShipments(shipmentResult.data);
+        setWeightHistory(weightResult.success && weightResult.data.length > 0 ? weightResult.data : mockWeightData);
+        setShipments(shipmentResult.success && shipmentResult.data.length > 0 ? shipmentResult.data : mockShipments);
+        setIsSeeded(weightResult.data.length > 0 || shipmentResult.data.length > 0);
       } catch (error) {
         console.error('Dashboard data fetch error:', error);
+        setWeightHistory(mockWeightData);
+        setShipments(mockShipments);
       } finally {
         setLoading(false);
       }
@@ -29,6 +34,26 @@ const DashboardPage = () => {
     fetchData();
   }, []);
 
+  const handleSeedData = async () => {
+    try {
+      setLoading(true);
+      const result = await patientService.seedData();
+      if (result.success) {
+        const [weightResult, shipmentResult] = await Promise.all([
+          patientService.getWeightHistory(),
+          patientService.getShipments()
+        ]);
+        setWeightHistory(weightResult.success ? weightResult.data : mockWeightData);
+        setShipments(shipmentResult.success ? shipmentResult.data : mockShipments);
+        setIsSeeded(true);
+      }
+    } catch (error) {
+      console.error('Seed data error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) return <LoadingSpinner />;
 
   const latestWeight = weightHistory[weightHistory.length - 1]?.weight || currentUser?.currentWeight;
@@ -36,10 +61,19 @@ const DashboardPage = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
-      
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
+        {!isSeeded && (
+          <button
+            onClick={handleSeedData}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+          >
+            Seed Mock Data
+          </button>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {/* Current Weight Card */}
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <h3 className="text-lg font-medium text-gray-900">Current Weight</h3>
           <p className="mt-2 text-3xl font-semibold text-blue-600">
@@ -50,7 +84,6 @@ const DashboardPage = () => {
           )}
         </div>
 
-        {/* Progress Snapshot */}
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <h3 className="text-lg font-medium text-gray-900">Progress</h3>
           <p className="mt-2 text-3xl font-semibold text-green-600">
@@ -61,7 +94,6 @@ const DashboardPage = () => {
           </p>
         </div>
 
-        {/* Next Shipment */}
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <h3 className="text-lg font-medium text-gray-900">Next Shipment</h3>
           <p className="mt-2 text-sm text-gray-600">
@@ -77,7 +109,6 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Quick Stats or Recent Activity */}
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <h3 className="text-lg font-medium text-gray-900">Recent Weight Entries</h3>
         {weightHistory.length > 0 ? (

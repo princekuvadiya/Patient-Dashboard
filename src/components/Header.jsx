@@ -32,13 +32,13 @@ const Header = ({ toggleSidebar }) => {
         <div className="relative flex items-center space-x-4">
           <button
             onClick={() => setIsProfileOpen(!isProfileOpen)}
-            className="flex items-center space-x-2 focus:outline-none"
+            className="flex items-center space-x-2 focus:outline-none bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
             <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
               {currentUser?.firstName?.charAt(0)?.toUpperCase() || 'U'}
               {currentUser?.lastName?.charAt(0)?.toUpperCase() || ''}
             </div>
-            <span className="hidden sm:inline text-sm font-medium text-gray-700">
+            <span className="hidden sm:inline text-white text-sm font-medium text-gray-700">
               {currentUser?.firstName || 'User'} {currentUser?.lastName || ''}
             </span>
           </button>
@@ -48,7 +48,7 @@ const Header = ({ toggleSidebar }) => {
             <div className="absolute right-0 top-10 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
               <button
                 onClick={handleLogout}
-                className="flex items-center w-full px-4(py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className="flex items-center w-full px-4(py-2 text-sm text-white bg-blue-600  rounded-md hover:bg-blue-700"
               >
                 <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-2" />
                 Logout

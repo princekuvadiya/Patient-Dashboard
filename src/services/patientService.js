@@ -48,6 +48,22 @@ const patientService = {
     }
   },
 
+  async addShipment(shipmentData) {
+    try {
+      const response = await axios.post(
+        `${API_URL}/patient/shipments`,
+        shipmentData,
+        createAuthHeaders()
+      );
+      return { success: true, data: response.data };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to add shipment'
+      };
+    }
+  },
+
   async updateProfile(profileData) {
     try {
       const response = await axios.put(
@@ -60,6 +76,22 @@ const patientService = {
       return {
         success: false,
         message: error.response?.data?.message || 'Update failed'
+      };
+    }
+  },
+
+  async seedData() {
+    try {
+      const response = await axios.post(
+        `${API_URL}/patient/seed`,
+        {},
+        createAuthHeaders()
+      );
+      return { success: true, data: response.data };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to seed data'
       };
     }
   }

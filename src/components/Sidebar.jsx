@@ -40,16 +40,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               {item.name}
             </NavLink>
           ))}
-          <button
+          {/* <button
             onClick={() => {
               logout();
               if (isOpen) toggleSidebar();
             }}
-            className="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-white-900 rounded-md"
+            className="flex items-center w-full px-2 py-2 text-sm font-medium text-white hover:bg-gray-50 hover:text-white-900 rounded-md"
           >
             <ArrowLeftOnRectangleIcon className="mr-3 h-6 w-6" />
             Logout
-          </button>
+          </button> */}
         </nav>
       </div>
 
