@@ -29,7 +29,7 @@ const AuthForm = ({ type, onSubmit, error, onNavigate, navigateText }) => {
   };
 
   return (
-    <div className="min-h-screen min-w-screen flex items-center justify-center bg-gray-100 px-4">
+    <div className=" min-w-screen  min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-lg p-8 space-y-8 bg-white rounded-xl shadow-lg sm:max-w-md md:max-w-lg">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">

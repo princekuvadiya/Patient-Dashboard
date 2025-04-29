@@ -1,4 +1,3 @@
-// components/Notification.jsx
 import { useEffect } from 'react';
 
 export default function Notification({ message, type, onClose }) {

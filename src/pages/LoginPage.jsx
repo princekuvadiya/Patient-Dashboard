@@ -11,9 +11,10 @@ const LoginPage = () => {
   const handleSubmit = async ({ email, password }) => {
     setError('');
     const result = await login(email, password);
-    
     if (!result.success) {
       setError(result.message || 'Invalid email or password');
+    }else{
+window.location.reload();
     }
   };
 
